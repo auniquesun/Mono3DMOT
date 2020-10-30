@@ -1,0 +1,15 @@
+{
+    "root":"/mnt/sdb/public/data/jerry/FairMOT",
+    "train":
+    {
+        "mot15":"./data/my_mot15.train"
+    },
+    "test_emb":
+    {
+        "mot15":"./data/my_mot15.val"
+    },
+    "test":
+    {
+        "mot15":"./data/my_mot15.test"
+    }
+}
