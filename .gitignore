@@ -8,3 +8,5 @@ src/data/images
 src/data/example
 
 src/lib/__pycache__
+
+notebook/.ipynb_checkpoints
