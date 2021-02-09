@@ -157,6 +157,14 @@ class opts(object):
     self.parser.add_argument('--not_reg_offset', action='store_true',
                              help='not regress local offset.')
 
+    # 3d localization
+    self.parser.add_argument('--camera_fx', type=float, default=7.070493000000e+02,
+                             help='camera intrinsic parameter fx')
+    self.parser.add_argument('--camera_fy', type=float, default=7.070493000000e+02,
+                             help='camera intrinsic parameter fy')
+    self.parser.add_argument('--pedes_height', type=float, default=1.7,
+                             help='pedestrian height (m)')
+
   def parse(self, args=''):
     if args == '':
       opt = self.parser.parse_args()
