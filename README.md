@@ -1,5 +1,5 @@
 ## Introduction
-Due to the low cost and ease of use of monocular cameras, it will have a broad application prospect if the 3D spatial locations of pedestrians in the surveillance area can be accurately located and tracked by monocular cameras. To address the lack of efficient and accurate end-to-end pedestrian 3D localization and tracking methods based on monocular cameras, this paper proposes Mono3DMOT, a real-time multi-pedestrian detection, 3D localization and tracking method using only monocular cameras. It first performs joint learning of pedestrian detection and ID embedding representation, then solves the monocular scale ambiguity problem by assuming pedestrian height distribution. We also proposes a 3D location calculation method without additional parameters, and use target location and target embedding for pedestrians matching to improve the efficiency and accuracy of 3D localization and tracking. Comparison experiments with the current state-of-the-art method in several public data sets show that Mono3DMOT can accurately track pedestrian 3D locations and achieve real-time operational efficiency.
+Due to the low cost and ease of use of monocular cameras, it will have a broad application prospect if the 3D spatial locations of pedestrians in the surveillance area can be accurately located and tracked by monocular cameras. To address the lack of efficient and accurate end-to-end pedestrian 3D localization and tracking methods based on monocular cameras, we design and implement Mono3DMOT, a real-time multi-pedestrian detection, 3D localization and tracking method using only monocular cameras. It first performs joint learning of pedestrian detection and ID embedding representation, then solves the monocular scale ambiguity problem by assuming pedestrian height distribution. We also proposes a 3D location calculation method without additional parameters, and use target location and target embedding for pedestrians matching to improve the efficiency and accuracy of 3D localization and tracking. Comparison experiments with the current state-of-the-art methods in several public data sets show that Mono3DMOT can accurately track pedestrian 3D locations and achieve real-time operational efficiency.
 
 ## Installation
 * Clone this repo, and we'll call the directory that you cloned as ${Mono3DMOT_ROOT}
@@ -76,16 +76,13 @@ sh experiments/all_dla34.sh
 ```
 
 ## 3D Localization
-1. download [kitti](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d) dataset and unpack it, run
-   ```
-   cd kitti
-   ```
+1. Download [KITTI](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d) dataset and unpack it
 
-2. classify pedestrians according to distance and mode, don't forget save the results in `distance_and_mode.json`, referring to `notebook/3d_visualization.ipynb`
+2. Classify pedestrians according to distance and mode in KITTI, don't forget to save the results in `distance_and_mode.json`, referring to `notebook/3d_visualization.ipynb`
 
-3. predict 3D location of pedestrians in kitti and compute errors with ground truth, run
+3. Predict 3D location of pedestrians in KITTI and compute errors with ground truth
 
-4. visualize the results using `seaborn`, run
+4. Visualize the results using `seaborn`
 
 ## 3D Tracking
 * The default settings run tracking on the validation dataset from 2DMOT15. Using the DLA-34 baseline model, you can run:
