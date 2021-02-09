@@ -20,6 +20,7 @@ from tracking_utils.evaluation import Evaluator
 import datasets.dataset.jde as datasets
 
 from tracking_utils.utils import mkdir_if_missing
+from loc3d_utils import Loc3DParams
 from opts import opts
 
 
@@ -70,32 +71,19 @@ def write_results(filename, results, data_type):
     logger.info('save results to {}'.format(filename))
 
 
-# 人的高度，单位为m
-H = 1.7
-# 相机焦距，单位为m
-f_length = 0.018
-# 相机坐标系原点，设为和世界坐标系一致，原因是相机静止不动
-x_camera, y_camera, z_camera = .0, .98, .0
-# 图片分辨率，单位为 pixel
-x_res, y_res = 1920, 1080
-# x_res, y_res = 1626, 1080
-# 物理感光器件尺寸，单位为m
-x_hardware, y_hardware = 0.0236, 0.0158
-
-def compute_location(tlwh):
+def compute_location(tlwh, l3dp):
     x1, y1, w, h = tlwh
-    # 人的图片像素中心点
-    x_person, y_person = x1 + w/2, y1 + h/2
-    # hx,dx,dy
-    hx = h / (y_res / y_hardware)
-    dx = (x_person - x_res/2) / (x_res / x_hardware)
-    dy = (y_person - y_res/2) / (y_res / y_hardware)
-    # 人的世界坐标
-    x_world = dx * H / hx + x_camera
-    y_world = dy * H / hx + y_camera
-    z_world = f_length * H / hx + z_camera
+    # 行人框像素中心点
+    x_j, y_j = x1 + w/2, y1 + h/2
+    # 图片像素中心点
+    x_i, y_i = l3dp.img_width/2, l3dp.img_height/2
 
-    return (x_world, y_world, z_world)
+    # 人在相机坐标的3D位置：相机静止不动，相机坐标系与世界坐标系重合
+    x_c = l3dp.fy / l3dp.fx * l3dp.H * (x_j - x_i) / h
+    y_c = l3dp.H * (y_j - y_i) / h
+    z_c = l3dp.H * l3dp.fy / h
+
+    return (x_c, y_c, z_c)
 
 
 def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_image=True, img_name='00000'):
@@ -103,6 +91,7 @@ def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_im
         mkdir_if_missing(save_dir)
     tracker = JDETracker(opt)
     timer = Timer()
+    l3dp = Loc3DParams(opt.camera_fx, opt.camera_fy, img_size=opt.img_size, H=opt.pedes_height)
     results = []
     frame_id = 0
     for path, img, img0 in dataloader:
@@ -125,7 +114,7 @@ def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_im
             if tlwh[2] * tlwh[3] > opt.min_box_area and not vertical:
                 online_tlwhs.append(tlwh)
                 online_ids.append(tid)
-                loc = compute_location(tlwh)
+                loc = compute_location(tlwh, l3dp)
                 online_locs.append(loc)
         timer.toc()
         # save results
