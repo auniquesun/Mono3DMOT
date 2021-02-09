@@ -78,11 +78,13 @@ sh experiments/all_dla34.sh
 ## 3D Localization
 1. Download [KITTI](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d) dataset and unpack it
 
-2. Classify pedestrians according to distance and mode in KITTI, don't forget to save the results in `distance_and_mode.json`, referring to `notebook/3d_visualization.ipynb`
+2. Classify pedestrians according to distance and mode in KITTI, don't forget to save the results in `distance_and_mode.json`
 
 3. Predict 3D location of pedestrians in KITTI and compute errors with ground truth
 
-4. Visualize the results using `seaborn`
+4. Visualize the results using [seaborn](https://seaborn.pydata.org/)
+
+5. For implementation details of step 1~4, refer to [3d_visualization.ipynb](notebook/3d_visualization.ipynb)
 
 ## 3D Tracking
 * The default settings run tracking on the validation dataset from 2DMOT15. Using the DLA-34 baseline model, you can run:
