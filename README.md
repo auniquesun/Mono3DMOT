@@ -1,22 +1,5 @@
-
-## Abstract
-There has been remarkable progress on object detection and re-identification in recent years which are the core components for multi-object tracking. However, little attention has been focused on accomplishing the two tasks in a single network to improve the inference speed. The initial attempts along this path ended up with degraded results mainly because the re-identification branch is not appropriately learned. In this work, we study the essential reasons behind the failure, and accordingly present a simple baseline to addresses the problems. It remarkably outperforms the state-of-the-arts on the MOT challenge datasets at 30 FPS. We hope this baseline could inspire and help evaluate new ideas in this field.
-
-## Tracking performance
-### Results on MOT challenge test set
-| Dataset    |  MOTA | IDF1 | IDS | MT | ML | FPS |
-|--------------|-----------|--------|-------|----------|----------|--------|
-|2DMOT15  | 59.0 | 62.2 |  582 | 45.6% | 11.5% | 30.5 |
-|MOT16       | 68.7 | 70.4 | 953 | 39.5% | 19.0% | 25.9 |
-|MOT17       | 67.5 | 69.8 | 2868 | 37.7% | 20.8% | 25.9 |
-|MOT20       | 58.7 | 63.7 | 6013 | 66.3% | 8.5% | 13.2 |
-
- All of the results are obtained on the [MOT challenge](https://motchallenge.net) evaluation server under the “private detector” protocol. We rank first among all the trackers on 2DMOT15, MOT17 and the recently released (2020.02.29) MOT20. Note that our IDF1 score remarkably outperforms other one-shot MOT trackers by more than **10 points**. The tracking speed of the entire system can reach up to **30 FPS**.
-
-### Video demos on MOT challenge test set
-<img src="assets/MOT15.gif" width="400"/>   <img src="assets/MOT16.gif" width="400"/>
-<img src="assets/MOT17.gif" width="400"/>   <img src="assets/MOT20.gif" width="400"/>
-
+## Introduction
+Due to the low cost and ease of use of monocular cameras, it will have a broad application prospect if the 3D spatial locations of pedestrians in the surveillance area can be accurately located and tracked by monocular cameras. To address the lack of efficient and accurate end-to-end pedestrian 3D localization and tracking methods based on monocular cameras, this paper proposes Mono3DMOT, a real-time multi-pedestrian detection, 3D localization and tracking method using only monocular cameras. It first performs joint learning of pedestrian detection and ID embedding representation, then solves the monocular scale ambiguity problem by assuming pedestrian height distribution. We also proposes a 3D location calculation method without additional parameters, and use target location and target embedding for pedestrians matching to improve the efficiency and accuracy of 3D localization and tracking. Comparison experiments with the current state-of-the-art method in several public data sets show that Mono3DMOT can accurately track pedestrian 3D locations and achieve real-time operational efficiency.
 
 ## Installation
 * Clone this repo, and we'll call the directory that you cloned as ${Mono3DMOT_ROOT}
@@ -92,7 +75,19 @@ ${Mono3DMOT_ROOT}
 sh experiments/all_dla34.sh
 ```
 
-## Tracking
+## 3D Localization
+1. download [kitti](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d) dataset and unpack it, run
+   ```
+   cd kitti
+   ```
+
+2. classify pedestrians according to distance and mode, don't forget save the results in `distance_and_mode.json`, referring to `notebook/3d_visualization.ipynb`
+
+3. predict 3D location of pedestrians in kitti and compute errors with ground truth, run
+
+4. visualize the results using `seaborn`, run
+
+## 3D Tracking
 * The default settings run tracking on the validation dataset from 2DMOT15. Using the DLA-34 baseline model, you can run:
 ```
 cd src
@@ -147,17 +142,7 @@ python demo.py mot --load_model ../models/all_hrnet_v2_w18.pth --arch hrnet_18 -
 ```
 --conf_thres can be set from 0.3 to 0.7 depending on your own videos.
 
-## Acknowledgement
-A large part of the code is borrowed from [Zhongdao/Towards-Realtime-MOT](https://github.com/Zhongdao/Towards-Realtime-MOT) and [xingyizhou/CenterNet](https://github.com/xingyizhou/CenterNet). Thanks for their wonderful works.
-
-## 3D Localization
-1. download [kitti](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d) dataset and unpack it, run
-   ```
-   cd kitti
-   ```
-
-2. classify pedestrians according to distance and mode, don't forget save the results in `distance_and_mode.json`, referring to `notebook/3d_visualization.ipynb`
-
-3. predict 3D location of pedestrians in kitti and compute errors with ground truth, run
-
-4. visualize the results using `seaborn`, run
+## Reference
+* [Zhongdao/Towards-Realtime-MOT](https://github.com/Zhongdao/Towards-Realtime-MOT)
+* [xingyizhou/CenterNet](https://github.com/xingyizhou/CenterNet)
+* [ifzhang/FairMOT](https://github.com/ifzhang/FairMOT)
