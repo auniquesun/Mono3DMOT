@@ -84,7 +84,7 @@ sh experiments/all_dla34.sh
 
 4. Visualize the results using [seaborn](https://seaborn.pydata.org/)
 
-5. For implementation details of step 1~4, refer to [3d_visualization.ipynb](notebook/3d_visualization.ipynb)
+5. For implementation details of step 1~4, refer to `Evaluation of 3D Localization` in [3d_visualization.ipynb](notebook/3d_visualization.ipynb)
 
 ## 3D Tracking
 * The default settings run tracking on the validation dataset from 2DMOT15. Using the DLA-34 baseline model, you can run:
