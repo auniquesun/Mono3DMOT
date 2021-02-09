@@ -1,9 +1,4 @@
-# FairMOT
-A simple baseline for one-shot multi-object tracking:
-![](assets/pipeline.png)
-> [**A Simple Baseline for Multi-Object Tracking**](http://arxiv.org/abs/2004.01888),            
-> Yifu Zhang, Chunyu Wang, Xinggang Wang, Wenjun Zeng, Wenyu Liu,        
-> *arXiv technical report ([arXiv 2004.01888](http://arxiv.org/abs/2004.01888))*
+
 ## Abstract
 There has been remarkable progress on object detection and re-identification in recent years which are the core components for multi-object tracking. However, little attention has been focused on accomplishing the two tasks in a single network to improve the inference speed. The initial attempts along this path ended up with degraded results mainly because the re-identification branch is not appropriately learned. In this work, we study the essential reasons behind the failure, and accordingly present a simple baseline to addresses the problems. It remarkably outperforms the state-of-the-arts on the MOT challenge datasets at 30 FPS. We hope this baseline could inspire and help evaluate new ideas in this field.
 
@@ -24,13 +19,13 @@ There has been remarkable progress on object detection and re-identification in 
 
 
 ## Installation
-* Clone this repo, and we'll call the directory that you cloned as ${FAIRMOT_ROOT}
+* Clone this repo, and we'll call the directory that you cloned as ${Mono3DMOT_ROOT}
 * Install dependencies. We use python 3.7 and pytorch >= 1.2.0
 ```
-conda create -n FairMOT
-conda activate FairMOT
+conda create -n Mono3DMOT
+conda activate Mono3DMOT
 conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=10.0 -c pytorch
-cd ${FAIRMOT_ROOT}
+cd ${Mono3DMOT_ROOT}
 pip install -r requirements.txt
 cd src/lib/models/networks/DCNv2_new sh make.sh
 ```
@@ -71,7 +66,7 @@ DLA-34 COCO pretrained model: [DLA-34 official](https://drive.google.com/file/d/
 HRNetV2 ImageNet pretrained model: [HRNetV2-W18 official](https://1drv.ms/u/s!Aus8VCZ_C_33cMkPimlmClRvmpw), [HRNetV2-W32 official](https://1drv.ms/u/s!Aus8VCZ_C_33dYBMemi9xOUFR0w).
 After downloading, you should put the pretrained models in the following structure:
 ```
-${FAIRMOT_ROOT}
+${Mono3DMOT_ROOT}
    └——————models
            └——————ctdet_coco_dla_2x.pth
            └——————hrnetv2_w32_imagenet_pretrained.pth
@@ -79,10 +74,10 @@ ${FAIRMOT_ROOT}
 ```
 * **Baseline model**
 
-Our baseline FairMOT model can be downloaded here: DLA-34: [[Google]](https://drive.google.com/open?id=1udpOPum8fJdoEQm6n0jsIgMMViOMFinu) [[Baidu, code: 88yn]](https://pan.baidu.com/s/1YQGulGblw_hrfvwiO6MIvA). HRNetV2_W18: [[Google]](https://drive.google.com/open?id=182EHCOSzVVopvAqAXN5o6XHX4PEyLjZT) [[Baidu, code: z4ft]](https://pan.baidu.com/s/1h1qwn8dyJmKj_nZi5H3NAQ).
+Our baseline Mono3DMOT model can be downloaded here: DLA-34: [[Google]](https://drive.google.com/open?id=1udpOPum8fJdoEQm6n0jsIgMMViOMFinu) [[Baidu, code: 88yn]](https://pan.baidu.com/s/1YQGulGblw_hrfvwiO6MIvA). HRNetV2_W18: [[Google]](https://drive.google.com/open?id=182EHCOSzVVopvAqAXN5o6XHX4PEyLjZT) [[Baidu, code: z4ft]](https://pan.baidu.com/s/1h1qwn8dyJmKj_nZi5H3NAQ).
 After downloading, you should put the baseline model in the following structure:
 ```
-${FAIRMOT_ROOT}
+${Mono3DMOT_ROOT}
    └——————models
            └——————all_dla34.pth
            └——————all_hrnet_v2_w18.pth
@@ -155,13 +150,14 @@ python demo.py mot --load_model ../models/all_hrnet_v2_w18.pth --arch hrnet_18 -
 ## Acknowledgement
 A large part of the code is borrowed from [Zhongdao/Towards-Realtime-MOT](https://github.com/Zhongdao/Towards-Realtime-MOT) and [xingyizhou/CenterNet](https://github.com/xingyizhou/CenterNet). Thanks for their wonderful works.
 
-## Citation
+## 3D Localization
+1. download [kitti](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d) dataset and unpack it, run
+   ```
+   cd kitti
+   ```
 
-```
-@article{zhang2020simple,
-  title={A Simple Baseline for Multi-Object Tracking},
-  author={Zhang, Yifu and Wang, Chunyu and Wang, Xinggang and Zeng, Wenjun and Liu, Wenyu},
-  journal={arXiv preprint arXiv:2004.01888},
-  year={2020}
-}
-```
+2. classify pedestrians according to distance and mode, don't forget save the results in `distance_and_mode.json`, referring to `notebook/3d_visualization.ipynb`
+
+3. predict 3D location of pedestrians in kitti and compute errors with ground truth, run
+
+4. visualize the results using `seaborn`, run
