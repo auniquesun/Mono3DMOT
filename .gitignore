@@ -12,3 +12,5 @@ src/lib/__pycache__
 notebook/.ipynb_checkpoints
 
 models/
+
+NOTE.md
