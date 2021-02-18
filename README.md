@@ -46,26 +46,28 @@ to generate the labels of 2DMOT15 and MOT20. The seqinfo.ini files of 2DMOT15 ca
 * **Pretrained models**
 
 DLA-34 COCO pretrained model: [DLA-34 official](https://drive.google.com/file/d/1pl_-ael8wERdUREEnaIfqOV_VF2bEVRT/view).
-HRNetV2 ImageNet pretrained model: [HRNetV2-W18 official](https://1drv.ms/u/s!Aus8VCZ_C_33cMkPimlmClRvmpw), [HRNetV2-W32 official](https://1drv.ms/u/s!Aus8VCZ_C_33dYBMemi9xOUFR0w).
+<!-- HRNetV2 ImageNet pretrained model: [HRNetV2-W18 official](https://1drv.ms/u/s!Aus8VCZ_C_33cMkPimlmClRvmpw), [HRNetV2-W32 official](https://1drv.ms/u/s!Aus8VCZ_C_33dYBMemi9xOUFR0w). -->
 After downloading, you should put the pretrained models in the following structure:
 ```
 ${Mono3DMOT_ROOT}
    └——————models
            └——————ctdet_coco_dla_2x.pth
-           └——————hrnetv2_w32_imagenet_pretrained.pth
-           └——————hrnetv2_w18_imagenet_pretrained.pth
+           └——————...
 ```
+<!-- └——————hrnetv2_w32_imagenet_pretrained.pth
+└——————hrnetv2_w18_imagenet_pretrained.pth -->
 * **Baseline model**
 
-Our baseline Mono3DMOT model can be downloaded here: DLA-34: [[Google]](https://drive.google.com/open?id=1udpOPum8fJdoEQm6n0jsIgMMViOMFinu) [[Baidu, code: 88yn]](https://pan.baidu.com/s/1YQGulGblw_hrfvwiO6MIvA). HRNetV2_W18: [[Google]](https://drive.google.com/open?id=182EHCOSzVVopvAqAXN5o6XHX4PEyLjZT) [[Baidu, code: z4ft]](https://pan.baidu.com/s/1h1qwn8dyJmKj_nZi5H3NAQ).
+Our baseline Mono3DMOT model can be downloaded here: DLA-34: [[Google]](https://drive.google.com/open?id=1udpOPum8fJdoEQm6n0jsIgMMViOMFinu) [[Baidu, code: 88yn]](https://pan.baidu.com/s/1YQGulGblw_hrfvwiO6MIvA).
+<!-- HRNetV2_W18: [[Google]](https://drive.google.com/open?id=182EHCOSzVVopvAqAXN5o6XHX4PEyLjZT) [[Baidu, code: z4ft]](https://pan.baidu.com/s/1h1qwn8dyJmKj_nZi5H3NAQ). -->
 After downloading, you should put the baseline model in the following structure:
 ```
 ${Mono3DMOT_ROOT}
    └——————models
            └——————all_dla34.pth
-           └——————all_hrnet_v2_w18.pth
            └——————...
 ```
+<!-- └——————all_hrnet_v2_w18.pth -->
 
 ## Training
 * Download the training data
@@ -92,14 +94,14 @@ sh experiments/all_dla34.sh
 cd src
 python track.py mot --load_model ../models/all_dla34.pth --conf_thres 0.6
 ```
-to see the tracking results (76.1 MOTA using the DLA-34 baseline model). You can also set save_images=True in src/track.py to save the visualization results of each frame. 
+to see the tracking results. You can also set save_images=True in src/track.py to save the visualization results of each frame. 
 
-Using the HRNetV2-W18 baseline model, you can run:
+<!-- Using the HRNetV2-W18 baseline model, you can run:
 ```
 cd src
 python track.py mot --load_model ../models/all_hrnet_v2_w18.pth --conf_thres 0.6 --arch hrnet_18 --reid_dim 128
 ```
-to see the tracking results (76.6 MOTA using the HRNetV2-W18 baseline model).
+to see the tracking results (76.6 MOTA using the HRNetV2-W18 baseline model). -->
 
 * To get the txt results of the test set of MOT16 or MOT17, you can run:
 ```
@@ -107,7 +109,7 @@ cd src
 python track.py mot --test_mot17 True --load_model ../models/all_dla34.pth --conf_thres 0.4
 python track.py mot --test_mot16 True --load_model ../models/all_dla34.pth --conf_thres 0.4
 ```
-and send the txt files to the [MOT challenge](https://motchallenge.net) evaluation server to get the results. (You can get the SOTA results 67.5 MOTA on MOT17 test set using the baseline model 'all_dla34.pth'.)
+and send the txt files to the [MOT challenge](https://motchallenge.net) evaluation server to get the results.
 
 * To get the SOTA results of 2DMOT15 and MOT20, you need to finetune the baseline model on the specific dataset because our training set do not contain them. You can run:
 ```
@@ -124,7 +126,7 @@ Results of the test set all need to be evaluated on the MOT challenge server. Yo
 ```
 python track.py mot --test_mot20 True --load_model ../models/mot20_dla34.pth --reid_dim 128 --conf_thres 0.3 --K 500
 ```
-After evaluating on MOT challenge server, you can get 58.7 MOTA on MOT20 test set using the model 'mot20_dla34.pth'.
+<!-- After evaluating on MOT challenge server, you can get 58.7 MOTA on MOT20 test set using the model 'mot20_dla34.pth'. -->
 
 ## Demo
 You can input a raw video and get the demo video by running src/demo.py and get the mp4 format of the demo video:
@@ -133,15 +135,15 @@ cd src
 python demo.py mot --load_model ../models/all_dla34.pth --conf_thres 0.4
 ```
 You can change --input-video and --output-root to get the demos of your own videos.
+--conf_thres can be set from 0.3 to 0.7 depending on your own videos.
 
-If you have difficulty building DCNv2 and thus cannot use the DLA-34 baseline model, you can run the demo with the HRNetV2_w18 baseline model (don't forget to comment lines with 'dcn' in src/libs/models/model.py if you do not build DCNv2): 
+<!-- If you have difficulty building DCNv2 and thus cannot use the DLA-34 baseline model, you can run the demo with the HRNetV2_w18 baseline model (don't forget to comment lines with 'dcn' in src/libs/models/model.py if you do not build DCNv2): 
 ```
 cd src
 python demo.py mot --load_model ../models/all_hrnet_v2_w18.pth --arch hrnet_18 --reid_dim 128 --conf_thres 0.4
-```
---conf_thres can be set from 0.3 to 0.7 depending on your own videos.
+``` -->
 
-## Reference
+<!-- ## Reference
 * [Zhongdao/Towards-Realtime-MOT](https://github.com/Zhongdao/Towards-Realtime-MOT)
 * [xingyizhou/CenterNet](https://github.com/xingyizhou/CenterNet)
-* [ifzhang/FairMOT](https://github.com/ifzhang/FairMOT)
+* [ifzhang/FairMOT](https://github.com/ifzhang/FairMOT) -->
