@@ -35,7 +35,7 @@ def write_results(filename, results, data_type):
     else:
         raise ValueError(data_type)
 
-    # 我添加的部分
+    # save 3d locations as dict[frame_id][track_id]
     import json
     dict = {}
 
@@ -50,15 +50,14 @@ def write_results(filename, results, data_type):
         for tlwh, track_id, loc in zip(tlwhs, track_ids, locs):
             if track_id < 0:
                 continue
-            # 终于搞清楚了 tlwh 的4个变量是什么意思，tl代表top left,
-            # w 代表 width，h 代表 height
+            # tlwh: t - top, l - left, w - width, h - height
             x1, y1, w, h = tlwh
             x2, y2 = x1 + w, y1 + h
 
-            # 按照left top right bottom 的顺序
+            # left top right bottom of bbox
             dict[track_id] = [x1, y1, x2, y2]
             
-            # 我添加的部分
+            # find a new ID
             # if track_id not in dict[frame_id].keys():
             #     dict[frame_id][track_id] = loc
 
@@ -73,12 +72,12 @@ def write_results(filename, results, data_type):
 
 def compute_location(tlwh, l3dp):
     x1, y1, w, h = tlwh
-    # 行人框像素中心点
+    # center of pedestrian bbox
     x_j, y_j = x1 + w/2, y1 + h/2
-    # 图片像素中心点
+    # center of image
     x_i, y_i = l3dp.img_width/2, l3dp.img_height/2
 
-    # 人在相机坐标的3D位置：相机静止不动，相机坐标系与世界坐标系重合
+    # pedestrian 3d location in camera coordinate system
     x_c = l3dp.fy / l3dp.fx * l3dp.H * (x_j - x_i) / h
     y_c = l3dp.H * (y_j - y_i) / h
     z_c = l3dp.H * l3dp.fy / h
@@ -104,7 +103,7 @@ def eval_seq(opt, dataloader, data_type, result_filename, save_dir=None, show_im
         online_targets = tracker.update(blob, img0)
         online_tlwhs = []
         online_ids = []
-        # 我添加的部分
+        # save 3d locations
         online_locs = []
 
         for t in online_targets:
