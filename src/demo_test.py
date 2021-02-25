@@ -11,8 +11,16 @@ from opts import opts
 from tracking_utils.utils import mkdir_if_missing
 from tracking_utils.log import logger
 import datasets.dataset.jde as datasets
-from track import eval_seq
+from track_test import eval_seq
 
+
+# kitti_dir = '/mnt/sdb/public/data/kitti/object/training'
+# img_dir = os.path.join(kitti_dir, 'image_2')
+# loc_dir = os.path.join(kitti_dir, 'localization')
+
+data_dir = 'data'
+img_dir = os.path.join(data_dir, 'images')
+loc_dir = os.path.join(kitti_dir, 'localization')
 
 logger.setLevel(logging.INFO)
 
@@ -22,13 +30,28 @@ def demo(opt):
     mkdir_if_missing(result_root)
 
     logger.info('Starting tracking...')
-    dataloader = datasets.LoadVideo(opt.input_video, opt.img_size)
-    
-    result_filename = os.path.join(result_root, 'results.json')
-    frame_rate = dataloader.frame_rate
 
-    frame_dir = None if opt.output_format == 'text' else osp.join(result_root, 'frame')
-    eval_seq(opt, dataloader, 'mot', result_filename, save_dir=frame_dir, show_image=False, frame_rate=frame_rate)
+    for f_name in os.listdir(loc_dir):
+        if f_name.endswith('.json'):
+            begin, end = 0, f_name.find('.')
+            prefix = f_name[begin:end]
+            result_filename = os.path.join(result_root, prefix + '.json')
+
+    # 检测结果
+    # result_filename = os.path.join(result_root, 'detection_results.json')
+
+            # 处理图片
+            input_image = os.path.join(img_dir, prefix + '.png')            
+            dataloader = datasets.LoadImages(input_image, opt.img_size)
+            # 评估结果
+            eval_seq(opt, dataloader, 'mot', result_filename, show_image=False)
+    
+    # 处理视频
+    # dataloader = datasets.LoadVideo(opt.input_video, opt.img_size)
+    # 定位结果
+    # result_filename = os.path.join(result_root, 'localization_results.json')
+    # frame_dir = None if opt.output_format == 'text' else osp.join(result_root, 'frame')
+    # eval_seq(opt, dataloader, 'mot', result_filename, save_dir=frame_dir, show_image=False)
 
     if opt.output_format == 'video':
         output_video_path = osp.join(result_root, 'result.mp4')
