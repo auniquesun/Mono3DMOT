@@ -1,3 +1,5 @@
+![](./assets/architecture.png)
+
 ## Introduction
 Due to the low cost and ease of use of monocular cameras, it will have a broad application prospect if the 3D spatial locations of pedestrians in the surveillance area can be accurately located and tracked by monocular cameras. To address the lack of efficient and accurate end-to-end pedestrian 3D localization and tracking methods based on monocular cameras, we design and implement Mono3DMOT, a real-time multi-pedestrian detection, 3D localization and tracking method using only monocular cameras. It first performs joint learning of pedestrian detection and ID embedding representation, then solves the monocular scale ambiguity problem by assuming pedestrian height distribution. We also proposes a 3D location calculation method without additional parameters, and use target location and target embedding for pedestrians matching to improve the efficiency and accuracy of 3D localization and tracking. Comparison experiments with the current state-of-the-art methods in several public data sets show that Mono3DMOT can accurately track pedestrian 3D locations and achieve real-time operational efficiency.
 
@@ -10,7 +12,7 @@ conda activate Mono3DMOT
 conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=10.0 -c pytorch
 cd ${Mono3DMOT_ROOT}
 pip install -r requirements.txt
-cd src/lib/models/networks/DCNv2_new sh make.sh
+cd src/lib/models/networks/DCNv2_new && sh make.sh
 ```
 * We use [DCNv2](https://github.com/CharlesShang/DCNv2) in our backbone network and more details can be found in their repo. 
 * In order to run the code for demos, you also need to install [ffmpeg](https://www.ffmpeg.org/).
