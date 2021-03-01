@@ -165,6 +165,10 @@ class opts(object):
     self.parser.add_argument('--pedes_height', type=float, default=1.7,
                              help='pedestrian height (m)')
 
+    # access token of ip camera
+    self.parser.add_argument('--access_token', type=str, default='rtsp://root:pass@10.10.16.238/axis-media/media.amp',
+                             help='access token of ip camera')
+
   def parse(self, args=''):
     if args == '':
       opt = self.parser.parse_args()
