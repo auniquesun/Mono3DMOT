@@ -45,11 +45,14 @@ mode_and_distance = {
     }
 }
 
+
 """
 主要用到 localization 里面的json文件
 按照设置好的mode和interval，划分他们到字典 mode_and_distance
 """
-def main():
+import argparse
+
+def main(args):
     for f_loc in os.listdir(location_dir):
         # 004569.json 是对应一张特殊的图片: 人物框宽度不到 1 pixel，定位误差很大，暂不考虑它
         if f_loc != '004569.json' and f_loc != 'error_rate.json' and f_loc.endswith('.json'):
@@ -58,11 +61,23 @@ def main():
                 for idx in data.keys():
                     mode = data[idx]['mode']
                     interval = data[idx]['interval']
-                    mode_and_distance[mode][interval].append({'gt': data[idx]['gt'], 'computed': data[idx]['computed']})
+                    if args.flag == 0:
+                        mode_and_distance[mode][interval].append({'gt': data[idx]['gt'], 'computed': data[idx]['computed']})
+                    else:
+                        mode_and_distance[mode][interval].append({'gt': data[idx]['gt'], 'computed_normal': data[idx]['computed_normal']})
     
     # 保存中间结果
-    with open('mode_and_distance.json', 'w') as fout:
-        json.dump(mode_and_distance, fout, indent=4)
+    if args.flag == 0:
+        with open('mode_and_distance.json', 'w') as fout:
+            json.dump(mode_and_distance, fout, indent=4)
+    else:
+        with open('mode_and_distance_normal.json', 'w') as fout:
+            json.dump(mode_and_distance, fout, indent=4)
+
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--flag', type=int, default=0, help='flag to decide mode_and_distance or mode_and_distance_normal')
+    args = parser.parse_args()
+    
+    main(args)
